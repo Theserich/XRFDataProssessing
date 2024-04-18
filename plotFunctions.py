@@ -24,7 +24,7 @@ def setPlotParams(fontsize, figsize=(15, 10), auto=False, lw=1.5, inline=False):
         params['ytick.direction'] = 'in'
     pylab.rcParams.update(params)
 
-
+#change
 def plotElements(df, elements):
     setPlotParams(11,figsize=(15,10))
     fig, ax = plt.subplots(len(elements), sharex=True)

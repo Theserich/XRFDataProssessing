@@ -14,6 +14,11 @@ samplename = 'Text Data Newport_400DT_05TC_Focused_Thermal'
 samplename = 'Text Data WPT 9'
 samplename = 'Text Data WPT12'
 samplename = 'Text Data WPT301'
+samplename = 'Text Data WPT301'
+samplename = 'Text Data WPT301'
+samplename = 'Text Data WPT301'
+samplename = 'Text Data WPT301'
+
 
 samplename = 'Text Data WPT301'
 

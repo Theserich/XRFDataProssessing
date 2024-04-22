@@ -45,6 +45,8 @@ def linePlot(df, elements, index=0):
     plt.subplots_adjust(hspace=0)
     plt.show()
 
+def foo():
+    pass
 
 def ratiolinePlot(df, elements,dividelements, index=0):
     setPlotParams(11, figsize=(15, 10))

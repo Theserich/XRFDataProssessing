@@ -18,7 +18,7 @@ samplename = 'Text Data MSH PF957'
 samplename = 'Text Data MSH PF965'
 samplename = 'Text Data MSH PF977 Full'
 samplename = 'Text Data MSH PF984'
-
+#test
 #Samples from coastal Oregon, possible tsunami inundation 1700, 1884, 1964. This one sample covers the 1700 decades
 samplename = 'Text Data Newport_400DT_05TC_Focused_Thermal' #Requires rotation, collected in 2023
 samplename = 'Text Data Newport_PSME_Focus_A'#Requires rotation, collected in 2023

@@ -75,7 +75,7 @@ plt.show()
 # ax2[2].plot(df['S'][1])
 # plt.show()
 
-elementlist = ['Image','Ca','Mg','Fe','Ta','Mo','Sr','Mn','Cu','I','Zn']
+elementlist = ['Image','Ca','Mg','Fe','Ta','Mn','Cu','Zn','Sr','Mo','I']
 colormaplist=[plt.cm.Greys,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet]
 #Show the raster images of the elements
 #Do it automagically

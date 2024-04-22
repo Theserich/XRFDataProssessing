@@ -1,7 +1,7 @@
 from plotFunctions import *
 from ringManager import *
 
-redraw=True #Pick True to redraw rings, false to keep previous selected ring boundaries
+redraw=False #Pick True to redraw rings, false to keep previous selected ring boundaries
 
 #Lake Mackenzie, Tasmania Australia samples. 1961 fire deposited ash but not much more.
 samplename = 'Text Data LMCKSPL24_1950_1990_400_RES027'
@@ -26,14 +26,20 @@ samplename = 'Text Data Newport_PSME_1'#Requires rotation, collected in 2023
 samplename = 'Text Data PSME_2024' #This is a rescan run in 2024, no rotation required
 
 #These are samples from WApatki Ruins near sunset crater. Cunset crater erupted sometime between 1050 and 1100CE, suppression in late 1060's
+samplename = 'Text Data WPT5B'
+samplename = 'Text Data WPT 9'
+samplename = 'Text Data WPT9_1051_1093_400_RES013'
 samplename = 'Text Data WPT12'
 samplename = 'Text Data WPT12C_1060_1110ish_400_RES016_2'
-samplename = 'Text Data WPT9_1051_1093_400_RES013'
-samplename = 'Text Data WPT19b'
-samplename = 'Text Data WPT403'
 samplename = 'Text Data WPT19b_HiRes' #No Bromine, need to reanalyze all elements
-samplename = 'Text Data WPT 9'
+samplename = 'Text Data WPT19b'
+samplename = 'Text Data WPT25C_1056_1085'
+samplename = 'Text Data WPT25C_960_1000'
+samplename = 'Text Data WPT87C'
 samplename = 'Text Data WPT301'
+samplename = 'Text Data WPT403'
+
+samplename = 'Text Data WPT25C_960_1000'
 
 if samplename in ['Text Data Newport_400DT_05TC_Focused_Thermal']: #Use sample file name if rings are oriented horizontally
     rotate = True
@@ -48,8 +54,6 @@ setPlotParams(12,figsize=(20,6))
 fig, ax = plt.subplots()
 dataax = ax.twinx() #this draws the median data line along
 #dataax.plot(mediandf['Ca'], color = 'r')
-#Test change
-
 
 levls = np.linspace(-3,3, 100)
 
@@ -71,7 +75,7 @@ plt.show()
 # ax2[2].plot(df['S'][1])
 # plt.show()
 
-elementlist = ['Image','Ca','Mg','Fe','Ta','Mo']
+elementlist = ['Image','Ca','Mg','Fe','Ta','Mo','Sr','Mn','Cu','I','Zn']
 colormaplist=[plt.cm.Greys,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet]
 #Show the raster images of the elements
 #Do it automagically

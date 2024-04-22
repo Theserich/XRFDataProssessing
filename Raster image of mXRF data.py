@@ -39,7 +39,7 @@ samplename = 'Text Data WPT87C'
 samplename = 'Text Data WPT301'
 samplename = 'Text Data WPT403'
 
-samplename = 'Text Data WPT25C_960_1000'
+samplename = 'Text Data WPT87C'
 
 if samplename in ['Text Data Newport_400DT_05TC_Focused_Thermal']: #Use sample file name if rings are oriented horizontally
     rotate = True
@@ -55,7 +55,8 @@ fig, ax = plt.subplots()
 dataax = ax.twinx() #this draws the median data line along
 #dataax.plot(mediandf['Ca'], color = 'r')
 
-levls = np.linspace(-3,3, 100)
+#levls = np.linspace(-3,3, 100) #this works ok....
+levls = np.linspace(-10,10, 264)
 
 #Below is how to greyscale, raster image
 # ax.imshow(image,aspect='auto',cmap=plt.cm.gist_yarg)
@@ -64,7 +65,7 @@ levls = np.linspace(-3,3, 100)
 
 #Below shows the raster of elemental ratioing
 elements = ['Ca','Image']
-ax.contourf(df['Ca']/(df['Image']), levels=levls, cmap=plt.cm.jet) #for ratios
+ax.contourf(df['Ca']/(df['Image']), levels=levls, cmap=plt.cm.gist_heat) #for ratios
 ax.set_title(samplename+f'{elements}')
 plt.show()
 

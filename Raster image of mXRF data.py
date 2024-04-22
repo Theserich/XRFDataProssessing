@@ -1,6 +1,6 @@
 from plotFunctions import *
 from ringManager import *
-
+from matplotlib.pyplot import cm
 redraw=False #Pick True to redraw rings, false to keep previous selected ring boundaries
 
 #Lake Mackenzie, Tasmania Australia samples. 1961 fire deposited ash but not much more.
@@ -39,10 +39,12 @@ samplename = 'Text Data WPT87C'
 samplename = 'Text Data WPT301'
 samplename = 'Text Data WPT403'
 
-samplename = 'Text Data WPT87C'
+samplename = 'Text Data WPT5B'
 
 if samplename in ['Text Data Newport_400DT_05TC_Focused_Thermal']: #Use sample file name if rings are oriented horizontally
     rotate = True
+
+YearZero = 1164
 
 df = load_data(samplename)
 #df = normalizedata(df)
@@ -56,7 +58,7 @@ dataax = ax.twinx() #this draws the median data line along
 #dataax.plot(mediandf['Ca'], color = 'r')
 
 #levls = np.linspace(-3,3, 100) #this works ok....
-levls = np.linspace(-10,10, 264)
+levls = np.linspace(-6,6, 100)
 
 #Below is how to greyscale, raster image
 # ax.imshow(image,aspect='auto',cmap=plt.cm.gist_yarg)
@@ -65,7 +67,7 @@ levls = np.linspace(-10,10, 264)
 
 #Below shows the raster of elemental ratioing
 elements = ['Ca','Image']
-ax.contourf(df['Ca']/(df['Image']), levels=levls, cmap=plt.cm.gist_heat) #for ratios
+ax.contourf(df['Ca']/(df['Image']), levels=levls, cmap=plt.cm.GnBu) #for ratios
 ax.set_title(samplename+f'{elements}')
 plt.show()
 
@@ -76,8 +78,11 @@ plt.show()
 # ax2[2].plot(df['S'][1])
 # plt.show()
 
-elementlist = ['Image','Ca','Mg','Fe','Ta','Mn','Cu','Zn','Sr','Mo','I']
-colormaplist=[plt.cm.Greys,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet]
+elementlist = ['Image','Ca','Mg','Fe','Ta','Mn','Cu','Zn','Sr','Mo','I','Al','Si']
+colormaplist = {}
+for element in elementlist:
+    colormaplist[element] = cm.jet
+colormaplist['Image'] = cm.Greys
 #Show the raster images of the elements
 #Do it automagically
 #elementlist = df.keys()
@@ -85,9 +90,10 @@ colormaplist=[plt.cm.Greys,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.jet,plt.cm.je
 fig2, ax2 = plt.subplots(len(elementlist),sharex=True)
 for i, element in enumerate(elementlist):
     if element in df.keys():
-        ax2[i].contourf(df[element],aspect='auto', levels= levls, cmap=colormaplist[i],label=element)
+        ax2[i].contourf(df[element],aspect='auto', levels= levls, cmap=colormaplist[element],label=element)
     ax2[i].text(0.0, 0.5, element, transform=ax2[i].transAxes)
 
+#Show the raster images but manually add them to the page...don't use this
 # fig2, ax2 = plt.subplots(22)
 # ax2[0].imshow(df['Image'],aspect='auto', cmap=plt.cm.Greys,label='Image')
 # ax2[1].imshow(df['Na'],aspect='auto', cmap=plt.cm.jet)

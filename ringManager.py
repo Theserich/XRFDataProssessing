@@ -13,6 +13,11 @@ class ringwithClass:
         if not os.path.exists(self.path):
             os.makedirs(self.path)
         self.ringfile = join(folder,sampleName, ringfolder,sampleName+'.txt')
+        self.yearfile = join(folder,sampleName, ringfolder,'FirstYear'+'.txt')
+        if os.path.isfile(self.yearfile):
+            self.firstyear = np.loadtxt(self.yearfile)
+        else:
+            self.getYear()
         if os.path.isfile(self.ringfile) and redraw==False:
             self.rings = np.loadtxt(self.ringfile)
         else:
@@ -20,6 +25,17 @@ class ringwithClass:
             self.rings = []
             self.initialize_plot()
 
+
+
+    def getYear(self):
+        print('Enter year of fist ring:')
+        year = input()
+        try:
+            self.firstyear = int(year)
+        except:
+            print('Only integers are allowed:')
+            self.getYear()
+        np.savetxt(self.yearfile, [self.firstyear])
 
 
     def initialize_plot(self):

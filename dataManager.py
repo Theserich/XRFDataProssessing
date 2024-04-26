@@ -77,6 +77,20 @@ def getmedian(df):
     mediandf['dImage'] = -np.diff(mediandf['dImage'])
     return mediandf
 
+def getmedianofLines(df,range=(4,10)):
+    mediandf = {}
+    for key in df:
+        data = df[key]
+        data = data.transpose()
+        mediandf[key] = np.full(len(data),np.nan)
+        for i,d in enumerate(data):
+            med = np.median(d[range[0]:range[1]])
+            mediandf[key][i] = med
+    mediandf['dImage'] = mediandf['Image']
+    mediandf['dImage'] = -np.diff(mediandf['dImage'])
+    return mediandf
+
+
 def getAnnualDatadf(df,peaks,year0=2000,type='min'):
     years = []
     annualdf = {}

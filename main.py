@@ -26,7 +26,7 @@ if samplename in ['Text Data Newport_400DT_05TC_Focused_Thermal']:
     rotate = True
 
 
-ringsClass = ringwithClass(samplename,redraw=redraw)
+ringsClass = ringwithClass(samplename, redo=redraw)
 rings = ringsClass.rings
 df = load_data(samplename,rotate=rotate)
 image = copy(df['Image'])

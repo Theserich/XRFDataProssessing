@@ -15,7 +15,7 @@ class ringwithClass:
         self.metaPath = metadataPath
         self.rawdf = load_data(sampleName, folder=dataPath)
         self.path = join(dataPath, sampleName, metadataPath)
-        self.figpath = join(dataPath, sampleName, 'Figures')
+        self.figpath = join(dataPath, sampleName, 'Figures Raster')
         self.redo = redo
         if not os.path.exists(self.path):
             os.makedirs(self.path)

@@ -26,7 +26,9 @@ class ringwithClass:
         self.trimData()
         self.outlierElement = 'Si'
         self.maskOutliers()
-        self.drawRings()
+        self.getRingData()
+        self.calc_rings()
+
 
     def trimData(self):
         trimfile = 'trimindexes'
@@ -185,7 +187,7 @@ class ringwithClass:
             self.fig.canvas.draw()
 
 
-    def drawRings(self):
+    def getRingData(self):
         ringfile = 'ringindexes'
         if os.path.isfile(join(self.path, ringfile + '.json')) and self.redo == False:
             savedf = read_settings(ringfile, path=self.path)
@@ -225,10 +227,9 @@ class ringwithClass:
                 ringsave.append(listring)
             self.rings = ringsave
             if self.savebool:
-                print(self.rings)
+                #print(self.rings)
                 savedf = {'rings':self.rings,'ringindexes':self.ringindexes,'ringpoints':self.ringpoints,'firstyear':self.firstyear}
                 write_settings(savedf,file_name=ringfile,path=self.path)
-        self.calc_rings()
 
 
 
@@ -237,15 +238,17 @@ class ringwithClass:
     def calc_rings(self):
         self.years = np.arange(self.firstyear, self.firstyear + len(self.rings))
         self.ringinds = []
+        self.ringdata = {}
         ring0 = np.zeros(len(self.image))
         for ring in self.rings:
             meanind = sum(ring+ring0)/len(self.image)/2
             self.ringinds.append(meanind)
             ring0=ring
         self.ringdf = {}
-        types = ['mean', 'median', 'max', 'min','std']
+        types = ['mean', 'median', 'max', 'min','std','std2']
         for element in self.df:
             self.ringdf[element] = {}
+            self.ringdata[element] = []
             for type in types:
                 self.ringdf[element][type] = np.full(len(self.rings), np.nan)
         for element in self.df:
@@ -254,7 +257,10 @@ class ringwithClass:
                 ringdata = np.full(lendat, np.nan)
                 for i,index in enumerate(ringinds):
                     ringdata[i] = self.df[element][index[0],index[1]]
+                ringdata = ringdata[~np.isnan(ringdata)]
+                self.ringdata[element].append(ringdata)
                 for type in types:
+
                     try:
                         if type == 'mean':
                             self.ringdf[element][type][j] = np.nanmean(ringdata)
@@ -267,6 +273,8 @@ class ringwithClass:
                             self.ringdf[element][type][j] = np.nanmax(ringdata)
                         elif type == 'std':
                             self.ringdf[element][type][j] = np.nanstd(ringdata)
+                        elif type == 'std2':
+                            self.ringdf[element][type][j] = np.nanstd(ringdata)/len(ringdata)**0.5
                     except Exception as e:
                         pass
                         #print(e)
@@ -343,7 +351,7 @@ class ringwithClass:
                 self.ax.axline(point[0],point[1],color='C1')
             self.fig.canvas.draw()
 
-    def showDatapreparation(self,element='Si'):
+    def showDatapreparation(self,element='Si',block=True):
         setPlotParams(12, figsize=(20, 12))
         fig, ax = plt.subplots()
         ax.imshow(self.rawdf[element], aspect='auto', cmap=plt.cm.gist_yarg)
@@ -351,7 +359,8 @@ class ringwithClass:
         xlim = ax.get_xlim()
         # show trimmed region
         ax.axhspan(ymin=-1, ymax=self.yInd0, alpha=0.5)
-        ax.axhspan(ymin=self.yInd1 - 1, ymax=len(self.fullimage), alpha=0.5)
+        if self.yInd1 is not None:
+            ax.axhspan(ymin=self.yInd1 - 1, ymax=len(self.fullimage), alpha=0.5)
         # show masked areas
         for points in self.maskpoints:
             (self.x1, self.y1), (self.x2, self.y2) = points
@@ -367,8 +376,9 @@ class ringwithClass:
 
         ax.set_xlim(xlim)
         ax.set_ylim(ylim)
+        ax.set_title('Data preparation overview')
         plt.savefig(join(self.figpath,'1_DataOverview.png'))
-        plt.show()
+        plt.show(block=block)
     def generateAllElementFigs(self):
         setPlotParams(12,figsize=(20,5))
         for element in self.df:
@@ -380,7 +390,10 @@ class ringwithClass:
 
     def plotAnnualdata(self,elements=[],types=['mean','median','min','max']):
         setPlotParams(12, figsize=(20, 8))
+        Nplots = len(elements)
         fig, ax = plt.subplots(len(elements))
+        if Nplots == 1:
+            ax = [ax]
 
         for i,element in enumerate(elements):
             if element in self.df:
@@ -392,12 +405,32 @@ class ringwithClass:
         #plt.savefig(join(self.figpath, f'{element}.png'))
         plt.show()
 
+    def plotAnnualboxplot(self,elements=[],types=['mean','median','min','max']):
+        setPlotParams(12, figsize=(20, 8))
+        Nplots = len(elements)
+        fig, ax = plt.subplots(len(elements))
+        if Nplots == 1:
+            ax = [ax]
+        for i,element in enumerate(elements):
+            if element in self.df:
+                ax[i].set_ylabel(element)
+                ax[i].boxplot(self.ringdata[element],positions=self.years)
+                #ax[i].legend()
+        plt.subplots_adjust(hspace=0)
+        #plt.savefig(join(self.figpath, f'{element}.png'))
+        plt.show()
+
 
 
     def plotringdata(self,elements=[]):
         mediandf = getmedian(self.df)
         setPlotParams(12, figsize=(20, 8))
+        Nplots = len(elements)
+        Nplots = len(elements)
         fig, ax = plt.subplots(len(elements))
+        if Nplots == 1:
+            ax = [ax]
+
         for i,element in enumerate(elements):
             imax = ax[i]
             imax.set_yticks([])
@@ -407,10 +440,10 @@ class ringwithClass:
                 lineax.plot(mediandf[element])
                 lineax.set_ylabel(element)
                 #for type in types:
-                #    lineax.plot(self.ringinds,self.ringdf[element][type], label='Ring '+type)
+                #    lineax.plot(self.ringinds,self.ringdf[element][type], label='Ring '+type)$
+
                 lineax.errorbar(self.ringinds,self.ringdf[element]['median'],yerr=self.ringdf[element]['std'],capsize=3,fmt='x')
                 #lineax.errorbar(self.ringinds,self.ringdf[element]['mean'],yerr=self.ringdf[element]['std'],capsize=3,fmt='x')
-
                 #lineax.legend()
         plt.subplots_adjust(hspace=0)
         #plt.savefig(join(self.figpath, f'{element}.png'))

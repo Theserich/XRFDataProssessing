@@ -50,10 +50,9 @@ def write_settings(data: dict, file_name: str, path: str = '') -> None:
 	return write_file(data=data, file_name=file_name, path=path, file_format='json')
 
 def normalizedata(df):
-
 	for key in df:
-		maximum = df[key].max()
-		minimum = df[key].min()
+		maximum = np.nanmax(df[key])
+		minimum = np.nanmin(df[key])
 		totrange = maximum - minimum
 		df[key] = (df[key] - minimum) / totrange
 	return df

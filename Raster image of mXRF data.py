@@ -39,7 +39,7 @@ samplename = 'Text Data WPT87C'
 samplename = 'Text Data WPT301'
 samplename = 'Text Data WPT403'
 
-samplename = 'Text Data WPT5B'
+samplename = 'Text Data MSH PF918'
 
 if samplename in ['Text Data Newport_400DT_05TC_Focused_Thermal']: #Use sample file name if rings are oriented horizontally
     rotate = True
@@ -52,7 +52,7 @@ df = zscore(df)
 image = df['Image']
 mediandf = getmedian(df)
 
-setPlotParams(12,figsize=(20,6))
+setPlotParams(12,figsize=(20,1))
 fig, ax = plt.subplots()
 dataax = ax.twinx() #this draws the median data line along
 #dataax.plot(mediandf['Ca'], color = 'r')
@@ -78,10 +78,11 @@ plt.show()
 # ax2[2].plot(df['S'][1])
 # plt.show()
 
-elementlist = ['Image','Ca','Mg','Fe','Ta','Mn','Cu','Zn','Sr','Mo','I','Al','Si']
+setPlotParams(12,figsize=(20,6))
+elementlist = ['Image','Ca','Mg','Fe','Mn','Cu','Zn','I','Al','Si']
 colormaplist = {}
 for element in elementlist:
-    colormaplist[element] = cm.jet
+    colormaplist[element] = cm.GnBu
 colormaplist['Image'] = cm.Greys
 #Show the raster images of the elements
 #Do it automagically

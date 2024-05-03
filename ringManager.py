@@ -183,7 +183,7 @@ class ringwithClass:
                 self.ax.plot(self.x2, self.y2, 'x', color='C1')
                 self.ax.add_patch(rect)
             self.firstclick = True
-            self.ax.set_title('Mark where you want to ignore')
+            self.ax.set_title('Mark where you want to ignore, click upper left then lower right of bounding box to exclude')
             self.fig.canvas.draw()
 
 
@@ -282,7 +282,7 @@ class ringwithClass:
 
 
     def getYearInput(self):
-        print('Enter year of fist ring:')
+        print('Enter year of first partial or whole ring:')
         year = input()
         try:
             self.firstyear = int(year)

@@ -4,9 +4,10 @@ from ringManager import * #Imports all the functions used in the code below from
 
 ##### Crop and mask problem areas of the sample, and indicate ring years  ######
 ##### To redo ring years or the masks, open Metadata and delete the relevant file separately  #######
+##### Functions are built so that data is oriented from pith (left) to bark (right), use rotate query to rotate samples clockwise to meet this criteria.  #####
 
 samplename = 'Text Data WPT301'  #Name of the folder the data is. Folder should include at least one .txt image (which is an matrix of values titled "... - Image.txt" and one with "... - Si.txt"
-data = ringwithClass(samplename,redo=False) #This function calls the first year query, trim function, the mask function and the ring selection function
+data = ringwithClass(samplename,redo=False) #This function calls the first year query, rotate query, trim function, the mask function and the ring selection function
 data.showDatapreparation(element='Image',block=False) #Shows the slice, and the masks selected above
 #####  The first year datum is located at the bottom of the ringindexes.json file in the Metadata folder if you need to change it   #####
 

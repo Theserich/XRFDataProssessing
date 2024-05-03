@@ -23,6 +23,8 @@ class ringwithClass:
             os.makedirs(self.figpath)
 
         self.fullimage = self.rawdf['Image']
+
+        self.rotatateData()
         self.trimData()
         self.outlierElement = 'Si'
         self.maskOutliers()
@@ -102,6 +104,47 @@ class ringwithClass:
                     self.ax.axhline(self.yInd0)
                     self.ax.axhline(self.yInd1)
                 self.fig.canvas.draw()
+
+    def rotatateData(self):
+        rotationfile = 'rotation'
+        if os.path.isfile(join(self.path,rotationfile+'.json')) and self.redo == False:
+            savedf = read_settings(rotationfile,path=self.path)
+            self.rotation = savedf['rotation']
+        else:
+            self.savebool = False
+            self.rotation = 0
+            self.fig, self.ax = plt.subplots()
+            self.ax.imshow(self.fullimage, aspect='auto', cmap=plt.cm.gist_yarg)
+            plt.gcf().canvas.mpl_connect('key_press_event', self.rotationKeyEvent)
+            self.ax.set_title('Press Arrows to rotate the image')
+            plt.show()
+            if self.savebool:
+                savedf = {'rotation':self.rotation}
+                write_settings(savedf,file_name=rotationfile,path=self.path)
+        for element in self.rawdf:
+            self.rawdf[element] = np.rot90(self.rawdf[element],self.rotation)
+        self.fullimage = self.rawdf['Image']
+
+
+    def rotationKeyEvent(self, event):
+        if event.key == 'enter':
+            self.savebool = True
+            plt.close()
+        if event.key == 'down' or event.key == 'left':
+            self.ax.clear()
+            self.rotation -= 1
+            self.ax.imshow(np.rot90(self.fullimage,self.rotation), aspect='auto', cmap=plt.cm.gist_yarg)
+            self.ax.set_title('Press Arrows to rotate the image')
+            self.fig.canvas.draw()
+        if event.key == 'right' or event.key == 'up':
+            self.ax.clear()
+            self.rotation += 1
+            self.ax.imshow(np.rot90(self.fullimage, self.rotation), aspect='auto', cmap=plt.cm.gist_yarg)
+            self.ax.set_title('Press Arrows to rotate the image')
+            self.fig.canvas.draw()
+
+
+
 
     def maskOutliers(self):
         maskfile = 'maskindexes'
